@@ -1,25 +1,55 @@
-import logo from './logo.svg';
+import React, {useReducer} from 'react';
+import TodoForm from './components/todoForm';
+import TodoList from './components/todoList';
 import './App.css';
+import "./components/todo.css";
+import {
+  formReducer,
+  initialState,
+  ADD_TASK,
+  TOGGLE_TASK,
+  CLEAR_TASK
+} from './reducer/reducer.js';
 
-function App() {
+
+const App = () => {
+
+  const [state, dispatch] = useReducer(formReducer, initialState);
+
+    //add task
+    const addTask = (e, data) => {
+      e.preventDefault();
+      dispatch({ type: ADD_TASK, payload: data });
+    };
+
+    //toggletask
+    const toggleTask = taskId => {
+      dispatch({ type: TOGGLE_TASK, payload: taskId });
+    };
+
+    //clear task
+    const clearTask = e => {
+      e.preventDefault();
+      dispatch({ type: CLEAR_TASK });
+    };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header>
+      <h2>Todo List</h2>
       </header>
+      <main>
+      <TodoList
+        data = {state.data}
+        toggleTask = {toggleTask}
+        clearTask = {clearTask}
+        />
+      </main>
+      <div>
+      <TodoForm addTask={addTask} />
+      </div>
     </div>
   );
 }
 
-export default App;
+export default App; 
